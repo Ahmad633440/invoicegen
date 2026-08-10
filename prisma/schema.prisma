@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model User {
+    id             String          @id @default(cuid())
+    email          String          @unique
+    name           String?
+    companyProfile CompanyProfile?
+    clients        Client[]
+    invoices       Invoice[]
+    createdAt      DateTime        @default(now())
+}
+
+model CompanyProfile {
+    id      String  @id @default(cuid())
+    userId  String  @unique
+    user    User    @relation(fields: [userId], references: [id])
+    logoUrl String?
+    name    String
+    address String?
+    email   String?
+    phone   String?
+}
+
+model Client {
+    id        String    @id @default(cuid())
+    userId    String
+    user      User      @relation(fields: [userId], references: [id])
+    name      String
+    address   String?
+    email     String?
+    invoices  Invoice[]
+    createdAt DateTime  @default(now())
+}
+
+model Invoice {
+    id            String        @id @default(cuid())
+    userId        String
+    user          User          @relation(fields: [userId], references: [id])
+    clientId      String
+    client        Client        @relation(fields: [clientId], references: [id])
+    invoiceNumber String
+    title         String?
+    invoiceFor    String?
+    date          DateTime
+    dueDate       DateTime?
+    paymentTerms  String?
+    poNumber      String?
+    billTo        String?
+    shipTo        String?
+    notes         String?
+    terms         String?
+    advance       Int           @default(0)
+    taxPercent    Int           @default(0)
+    discount      Int           @default(0)
+    shipping      Int           @default(0)
+    amountPaid    Int           @default(0)
+    status        String        @default("draft")
+    signatureUrl  String?
+    items         InvoiceItem[]
+    createdAt     DateTime      @default(now())
+}
+
+model InvoiceItem {
+    id          String  @id @default(cuid())
+    invoiceId   String
+    invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+    description String
+    quantity    Int
+    rate        Decimal
+    amount      Decimal
+}
