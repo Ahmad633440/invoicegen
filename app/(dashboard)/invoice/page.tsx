@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React, { useMemo, useState } from 'react'
 import { pdf } from "@react-pdf/renderer";
-import { InvoicePDF } from '@/lib/pdf/invoice-template'
+import { InvoicePDF, type InvoiceData } from '@/lib/pdf/invoice-template'
 
 type LineItem = {
   id: string
@@ -47,6 +47,44 @@ const InvoicePage = () => {
 
   const balanceDue = Math.max(subtotal - advance, 0)
 
+  const invoiceData = useMemo<InvoiceData>(() => ({
+    companyName: invoiceTitle || 'Invoice',
+    invoiceNumber: invoiceNumber || '0001',
+    date,
+    paymentTerms,
+    dueDate,
+    poNumber,
+    billTo: billTo || formFor,
+    shipTo,
+    notes,
+    terms,
+    subtotal,
+    total: balanceDue,
+    items: lineItems.map(item => ({
+      description: item.description || 'Item',
+      quantity: item.quantity,
+      rate: item.rate,
+      amount: item.quantity * item.rate,
+    })),
+    logo: logoPreview || undefined,
+  }), [
+    invoiceTitle,
+    invoiceNumber,
+    date,
+    paymentTerms,
+    dueDate,
+    poNumber,
+    billTo,
+    formFor,
+    shipTo,
+    notes,
+    terms,
+    subtotal,
+    balanceDue,
+    lineItems,
+    logoPreview,
+  ])
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -80,15 +118,14 @@ const InvoicePage = () => {
   }
 
 
-  async function handleDownloadPDF(invoiceData: any) {
-       const blob = await pdf(<InvoicePDF data={invoiceData} />).toBlob();
-       const url = URL.createObjectURL(blob);
-       const link = document.createElement("a");
-       link.href = url;
-       link.download = `invoice-${invoiceData.invoiceNumber}.pdf`;
-       link.click();
-       URL.revokeObjectURL(url);
-  
+  async function handleDownloadPDF(data: InvoiceData) {
+    const blob = await pdf(<InvoicePDF data={data} />).toBlob()
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `invoice-${data.invoiceNumber || 'invoice'}.pdf`
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -327,7 +364,7 @@ const InvoicePage = () => {
                     <span>Balance Due</span>
                     <span>PKR {balanceDue.toFixed(2)}</span>
                   </div>
-                  <Button type="button" className="w-full">
+                  <Button type="button" className="w-full" onClick={() => handleDownloadPDF(invoiceData)}>
                     Proceed
                   </Button>
                 </div>
