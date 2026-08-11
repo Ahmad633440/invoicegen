@@ -6,6 +6,8 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React, { useMemo, useState } from 'react'
+import { pdf } from "@react-pdf/renderer";
+import { InvoicePDF } from '@/lib/pdf/invoice-template'
 
 type LineItem = {
   id: string
@@ -75,6 +77,18 @@ const InvoicePage = () => {
 
   const removeLineItem = (id: string) => {
     setLineItems(current => current.filter(item => item.id !== id))
+  }
+
+
+  async function handleDownloadPDF(invoiceData: any) {
+       const blob = await pdf(<InvoicePDF data={invoiceData} />).toBlob();
+       const url = URL.createObjectURL(blob);
+       const link = document.createElement("a");
+       link.href = url;
+       link.download = `invoice-${invoiceData.invoiceNumber}.pdf`;
+       link.click();
+       URL.revokeObjectURL(url);
+  
   }
 
   return (
