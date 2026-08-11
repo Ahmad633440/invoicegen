@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useMemo, useState } from 'react'
-import { pdf } from "@react-pdf/renderer";
-import { InvoicePDF, type InvoiceData } from '@/lib/pdf/invoice-template'
+import { useMemo, useState } from 'react'
+import InvoicePreview from '@/components/invoice/InvoicePreview'
+import { type InvoiceData } from '@/lib/pdf/invoice-template'
 
 type LineItem = {
   id: string
@@ -39,6 +39,7 @@ const InvoicePage = () => {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [logoError, setLogoError] = useState<string | null>(null)
   const [advance, setAdvance] = useState(0)
+  
 
   const subtotal = useMemo(
     () => lineItems.reduce((sum, item) => sum + item.quantity * item.rate, 0),
@@ -46,6 +47,8 @@ const InvoicePage = () => {
   )
 
   const balanceDue = Math.max(subtotal - advance, 0)
+
+  const [previewOpen, setPreviewOpen] = useState(false)
 
   const invoiceData = useMemo<InvoiceData>(() => ({
     companyName: invoiceTitle || 'Invoice',
@@ -118,16 +121,6 @@ const InvoicePage = () => {
   }
 
 
-  async function handleDownloadPDF(data: InvoiceData) {
-    const blob = await pdf(<InvoicePDF data={data} />).toBlob()
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `invoice-${data.invoiceNumber || 'invoice'}.pdf`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       <Navbar />
@@ -170,7 +163,7 @@ const InvoicePage = () => {
               <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label htmlFor="logoUpload">Logo & photo</Label>
+                    <Label htmlFor="logoUpload">Logo</Label>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Upload PNG/JPG, max 700KB</p>
                   </div>
                   <input
@@ -364,7 +357,7 @@ const InvoicePage = () => {
                     <span>Balance Due</span>
                     <span>PKR {balanceDue.toFixed(2)}</span>
                   </div>
-                  <Button type="button" className="w-full" onClick={() => handleDownloadPDF(invoiceData)}>
+                  <Button type="button" className="w-full" onClick={() => setPreviewOpen(true)}>
                     Proceed
                   </Button>
                 </div>
@@ -373,6 +366,9 @@ const InvoicePage = () => {
           </Card>
         </div>
       </main>
+
+      <InvoicePreview open={previewOpen} onClose={() => setPreviewOpen(false)} data={invoiceData} />
+
     </div>
   )
 }
