@@ -8,20 +8,31 @@ import {
 } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
-  page: { padding: 40, fontSize: 10 },
-  header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 24 },
-  logo: { width: 120, height: 40, objectFit: "contain" },
-  title: { fontSize: 24, fontWeight: "bold" },
-  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 4 },
-  section: { marginBottom: 16 },
-  sectionHeader: { fontSize: 12, fontWeight: "bold", marginBottom: 4 },
-  table: { marginTop: 16, width: "100%" },
-  tableHeader: { flexDirection: "row", borderBottomWidth: 1, paddingBottom: 4, fontWeight: "bold" },
-  tableRow: { flexDirection: "row", paddingVertical: 4, borderBottomWidth: 0.5, borderColor: "#e5e5e5" },
-  col1: { width: "50%" },
-  col2: { width: "16.66%", textAlign: "right" },
-  totalRow: { flexDirection: "row", justifyContent: "flex-end", marginTop: 12 },
-  notes: { marginTop: 12, fontSize: 10 },
+  page: { padding: 40, fontSize: 10, backgroundColor: '#ffffff' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
+  branding: { flexDirection: 'row', alignItems: 'center', width: '60%' },
+  logo: { width: 100, height: 60, objectFit: 'contain', marginRight: 20 },
+  companyName: { fontSize: 10, color: '#475569', textTransform: 'uppercase', letterSpacing: 1.2 },
+  titleBlock: { flexDirection: 'column', alignItems: 'center', width: '30%' },
+  title: { fontSize: 28, fontWeight: 'bold', letterSpacing: 1.4 },
+  invoiceNumber: { fontSize: 11, marginTop: 4, color: '#64748b' },
+  metaBlock: { width: '30%', alignItems: 'flex-end' },
+  metaLabel: { fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1 },
+  metaValue: { fontSize: 11, fontWeight: 'bold', marginTop: 2, color: '#0f172a' },
+  divider: { height: 1, backgroundColor: '#e2e8f0', marginVertical: 18 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
+  section: { marginBottom: 18 },
+  sectionHeader: { fontSize: 11, fontWeight: 'bold', marginBottom: 6, letterSpacing: 0.8, textTransform: 'uppercase' },
+  table: { marginTop: 16, width: '100%', borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8, overflow: 'hidden' },
+  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#e2e8f0', paddingVertical: 10, backgroundColor: '#f8fafc', fontWeight: 'bold' },
+  tableRow: { flexDirection: 'row', paddingVertical: 10, borderBottomWidth: 1, borderColor: '#e2e8f0' },
+  tableRowLast: { borderBottomWidth: 0 },
+  col1: { width: '50%', paddingRight: 8 },
+  col2: { width: '16.66%', textAlign: 'right' },
+  totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 18, paddingTop: 12, borderTopWidth: 1, borderColor: '#e2e8f0' },
+  totalLabel: { fontSize: 11, color: '#475569' },
+  totalValue: { fontSize: 14, fontWeight: 'bold', color: '#0f172a' },
+  notes: { marginTop: 14, fontSize: 10, lineHeight: 1.5 },
 });
 
 export type InvoiceData = {
@@ -46,22 +57,28 @@ export function InvoicePDF({ data }: { data: InvoiceData }) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <View>
+          <View style={styles.branding}>
             {data.logo ? <Image src={data.logo} style={styles.logo} /> : null}
-            <Text>{data.companyName}</Text>
+            <View>
+              <Text style={styles.companyName}>{data.companyName || 'Invoice'}</Text>
+            </View>
           </View>
-          <View>
+          <View style={styles.titleBlock}>
             <Text style={styles.title}>INVOICE</Text>
-            <Text>#{data.invoiceNumber}</Text>
+            <Text style={styles.invoiceNumber}>#{data.invoiceNumber}</Text>
+          </View>
+          <View style={styles.metaBlock}>
+            <Text style={styles.metaLabel}>Date</Text>
+            <Text style={styles.metaValue}>{data.date || '-'}</Text>
+            <Text style={styles.metaLabel}>Due Date</Text>
+            <Text style={styles.metaValue}>{data.dueDate || '-'}</Text>
           </View>
         </View>
 
+        <View style={styles.divider} />
+
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Invoice details</Text>
-          <View style={styles.row}>
-            <Text>Date: {data.date || '-'}</Text>
-            <Text>Due date: {data.dueDate || '-'}</Text>
-          </View>
           <View style={styles.row}>
             <Text>Payment terms: {data.paymentTerms || '-'}</Text>
             <Text>PO#: {data.poNumber || '-'}</Text>
