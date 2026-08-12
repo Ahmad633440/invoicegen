@@ -51,8 +51,10 @@ const InvoicePage = () => {
   const [previewOpen, setPreviewOpen] = useState(false)
 
   const invoiceData = useMemo<InvoiceData>(() => ({
-    companyName: invoiceTitle || 'Invoice',
+    invoiceTitle: invoiceTitle || 'Invoice',
     invoiceNumber: invoiceNumber || '0001',
+    logo: logoPreview || undefined,
+    formFor,
     date,
     paymentTerms,
     dueDate,
@@ -61,15 +63,15 @@ const InvoicePage = () => {
     shipTo,
     notes,
     terms,
-    subtotal,
-    total: balanceDue,
     items: lineItems.map(item => ({
       description: item.description || 'Item',
       quantity: item.quantity,
       rate: item.rate,
       amount: item.quantity * item.rate,
     })),
-    logo: logoPreview || undefined,
+    subtotal,
+    advance,
+    balanceDue,
   }), [
     invoiceTitle,
     invoiceNumber,
