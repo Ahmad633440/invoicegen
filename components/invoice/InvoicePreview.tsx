@@ -42,12 +42,12 @@ export default function InvoicePreview({ open, onClose, data }: Props) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/60 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[color:var(--popover)]/60 p-4 backdrop-blur-sm">
       <Card className="w-full max-w-6xl p-6 shadow-[0_32px_80px_rgba(15,23,42,0.18)]">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Invoice Preview</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Preview the final A4 invoice before downloading or printing.</p>
+            <p className="text-sm text-[color:var(--muted-foreground)]">Preview the final A4 invoice before downloading or printing.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button type="button" variant="outline" onClick={onClose}>
@@ -62,7 +62,7 @@ export default function InvoicePreview({ open, onClose, data }: Props) {
           </div>
         </div>
 
-        <div className="mt-6 overflow-hidden rounded-[28px] border border-slate-200 bg-slate-100 p-4 shadow-[0_18px_60px_rgba(15,23,42,0.12)] dark:border-slate-800 dark:bg-slate-950/80">
+        <div className="mt-6 overflow-hidden rounded-[28px] border border-[color:var(--border)] bg-[color:var(--secondary)] p-4 shadow-[0_18px_60px_rgba(15,23,42,0.12)]">
           <PDFViewer style={{ width: '100%', height: '80vh', border: '1px solid #d1d5db', borderRadius: 16, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.12)' }}>
             <InvoicePDF data={data} />
           </PDFViewer>

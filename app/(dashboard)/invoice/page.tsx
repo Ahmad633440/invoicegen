@@ -124,11 +124,11 @@ const InvoicePage = () => {
 
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+    <div className="min-h-screen bg-[color:var(--background)] text-[color:var(--foreground)]">
       <Navbar />
       <main className="mx-auto max-w-7xl px-6 py-8 sm:px-8">
         <div className="space-y-6">
-          <Card className="border-slate-200 p-6 dark:border-slate-800">
+          <Card className="border-[color:var(--border)] p-6">
             <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr] lg:items-end">
               <div className="space-y-3">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -162,25 +162,25 @@ const InvoicePage = () => {
                 </div>
               </div>
 
-              <div className="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+              <div className="space-y-3 rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <Label htmlFor="logoUpload">Logo</Label>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">Upload PNG/JPG, max 700KB</p>
+                    <p className="text-sm text-[color:var(--muted-foreground)]">Upload PNG/JPG, max 700KB</p>
                   </div>
                   <input
                     id="logoUpload"
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="w-full max-w-[220px] cursor-pointer rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50"
+                    className="w-full max-w-[220px] cursor-pointer rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] shadow-sm transition hover:border-[color:var(--ring)]"
                   />
                 </div>
-                <div className="mt-2 min-h-[96px] overflow-hidden rounded-3xl border border-dashed border-slate-200 bg-white p-3 text-center dark:border-slate-700 dark:bg-slate-950">
+                <div className="mt-2 min-h-[96px] overflow-hidden rounded-3xl border border-dashed border-[color:var(--border)] bg-[color:var(--card)] p-3 text-center">
                   {logoPreview ? (
                     <img src={logoPreview} alt="Logo preview" className="mx-auto h-24 object-contain" />
                   ) : (
-                    <p className="text-sm text-slate-500 dark:text-slate-400">No logo uploaded yet</p>
+                    <p className="text-sm text-[color:var(--muted-foreground)]">No logo uploaded yet</p>
                   )}
                 </div>
                 {logoError ? <p className="text-sm text-rose-600">{logoError}</p> : null}
@@ -188,7 +188,7 @@ const InvoicePage = () => {
             </div>
           </Card>
 
-          <Card className="border-slate-200 p-6 dark:border-slate-800">
+          <Card className="border-[color:var(--border)] p-6">
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -226,7 +226,7 @@ const InvoicePage = () => {
                     value={billTo}
                     onChange={event => setBillTo(event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 shadow-sm transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/10"
+                    className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] shadow-sm transition focus:border-[color:var(--ring)] focus:ring-2 focus:ring-[color:var(--ring)]/10"
                     placeholder="Client name, address, email"
                   />
                 </div>
@@ -237,7 +237,7 @@ const InvoicePage = () => {
                     value={shipTo}
                     onChange={event => setShipTo(event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 shadow-sm transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/10"
+                    className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] shadow-sm transition focus:border-[color:var(--ring)] focus:ring-2 focus:ring-[color:var(--ring)]/10"
                     placeholder="Shipping address or contact"
                   />
                 </div>
@@ -245,19 +245,18 @@ const InvoicePage = () => {
             </div>
           </Card>
 
-          <Card className="border-slate-200 p-6 dark:border-slate-800">
-            <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-800">
+          <Card className="border-[color:var(--border)] p-6">
+            <div className="flex items-center justify-between gap-4 border-b border-[color:var(--border)] pb-4">
               <div>
                 <h2 className="text-lg font-semibold">Items</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Add invoice line items and amounts.</p>
+                <p className="text-sm text-[color:var(--muted-foreground)]">Add invoice line items and amounts.</p>
               </div>
               <Button type="button" variant="outline" onClick={addLineItem}>
                 + Add line
               </Button>
             </div>
-
-            <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-              <div className="grid grid-cols-[3fr_1fr_1fr_1fr_auto] gap-4 border-b border-slate-200 px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-slate-500 dark:border-slate-800 dark:text-slate-400">
+            <div className="mt-6 overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)]">
+              <div className="grid grid-cols-[3fr_1fr_1fr_1fr_auto] gap-4 border-b border-[color:var(--border)] px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-[color:var(--muted-foreground)]">
                 <div>Item</div>
                 <div>Quantity</div>
                 <div>Rate</div>
@@ -266,7 +265,7 @@ const InvoicePage = () => {
               </div>
               <div className="space-y-3 p-4">
                 {lineItems.map((item, index) => (
-                  <div key={item.id} className="grid grid-cols-[3fr_1fr_1fr_1fr_auto] items-center gap-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <div key={item.id} className="grid grid-cols-[3fr_1fr_1fr_1fr_auto] items-center gap-4 rounded-3xl  bg-[color:var(--card)] p-4 shadow-sm">
                     <div>
                       <Input
                         value={item.description}
@@ -307,7 +306,7 @@ const InvoicePage = () => {
             </div>
           </Card>
 
-          <Card className="border-slate-200 p-6 dark:border-slate-800">
+          <Card className="border-[color:var(--border)] p-6">
             <div className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
               <div className="space-y-4">
                 <div>
@@ -317,7 +316,7 @@ const InvoicePage = () => {
                     value={notes}
                     onChange={event => setNotes(event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 shadow-sm transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/10"
+                    className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] shadow-sm transition focus:border-[color:var(--ring)] focus:ring-2 focus:ring-[color:var(--ring)]/10"
                     placeholder="Add any notes for the invoice here"
                   />
                 </div>
@@ -328,19 +327,18 @@ const InvoicePage = () => {
                     value={terms}
                     onChange={event => setTerms(event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 shadow-sm transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-500/10"
+                    className="w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm text-[color:var(--foreground)] shadow-sm transition focus:border-[color:var(--ring)] focus:ring-2 focus:ring-[color:var(--ring)]/10"
                     placeholder="Payment terms, delivery terms, or special conditions"
                   />
                 </div>
               </div>
-
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-950">
+              <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-5">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center justify-between text-sm text-[color:var(--muted-foreground)]">
                     <span>Subtotal</span>
                     <span>PKR {subtotal.toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center justify-between text-sm text-[color:var(--muted-foreground)]">
                     <Label htmlFor="advance">Advance</Label>
                     <Input
                       id="advance"
@@ -351,11 +349,11 @@ const InvoicePage = () => {
                       className="max-w-[140px]"
                     />
                   </div>
-                  <div className="flex items-center justify-between border-t border-slate-200 pt-4 text-base font-semibold dark:border-slate-800">
+                  <div className="flex items-center justify-between border-t border-[color:var(--border)] pt-4 text-base font-semibold">
                     <span>Balance</span>
                     <span>PKR {balanceDue.toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center justify-between text-sm text-[color:var(--muted-foreground)]">
                     <span>Balance Due</span>
                     <span>PKR {balanceDue.toFixed(2)}</span>
                   </div>

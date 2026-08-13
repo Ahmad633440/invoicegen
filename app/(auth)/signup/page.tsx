@@ -7,76 +7,100 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 
-import { useActionState } from 'react';
-import { signUpWithEmail } from './actions';
+import { useState } from 'react';
+import { authClient } from '@/lib/auth/client';
 
 export default function SignupPage() {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [state, formAction, isPending] = useActionState(signUpWithEmail, null);
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+    const form = new FormData(e.currentTarget);
+    const name = (form.get('name') as string) || '';
+    const email = form.get('email') as string;
+    const password = form.get('password') as string;
+
+    const { error } = await authClient.signUp.email({ email, password, name });
+    setIsLoading(false);
+    if (error) {
+      setError(error.message || 'Failed to create account');
+      return;
+    }
+    // on success redirect (respect redirect query param)
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const redirect = params.get('redirect') || '/invoice'
+      window.location.href = redirect
+    } catch (_) {
+      window.location.href = '/'
+    }
+  }
+
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+    <div className="flex min-h-screen flex-col bg-[color:var(--background)] text-[color:var(--foreground)]">
       <Navbar />
 
       <main className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6">
-        <Card className="w-full max-w-md rounded-xl border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-8">
+        <Card className="w-full max-w-md rounded-xl border-[color:var(--border)] bg-[color:var(--card)] p-6 shadow-sm sm:p-8">
           <div className="space-y-6">
             <div className="space-y-1.5 text-center sm:text-left">
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-slate-50">
+              <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--foreground)]">
                 Create your account
               </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Enter your details below to start generating invoices
-              </p>
+            
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-xs font-medium text-slate-900 dark:text-slate-100">
-                  Full name
+                 <Label htmlFor="name" className="text-xs font-medium text-[color:var(--foreground)]">
+                   Name
                 </Label>
                 <Input
                   id="name"
                   name="name"
                   type="text"
-                  placeholder="Jane Doe"
+                  placeholder="Enter your name"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-xs font-medium text-slate-900 dark:text-slate-100">
-                  Email address
+                <Label htmlFor="email" className="text-xs font-medium text-[color:var(--foreground)]">
+                  Email 
                 </Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-xs font-medium text-slate-900 dark:text-slate-100">
+                <Label htmlFor="password" className="text-xs font-medium text-[color:var(--foreground)]">
                   Password
                 </Label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="Create a secure password"
+                  placeholder="********"
                   required
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-emerald-600 text-white hover:bg-emerald-700">
-                Create Account
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? 'Creating…' : 'Create Account'}
               </Button>
             </form>
-
-            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+            {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+            <div className="text-center text-sm text-[color:var(--muted-foreground)]">
               Already registered?{" "}
-              <Link href="/login" className="font-medium text-emerald-600 hover:underline dark:text-emerald-400">
+              <Link href="/signin" className="font-medium text-[color:var(--primary)] hover:underline dark:text-[color:var(--primary-foreground)]">
                 Log in
               </Link>
             </div>

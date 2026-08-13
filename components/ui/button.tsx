@@ -8,16 +8,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:ring-emerald-300",
+        default: "bg-[color:var(--primary)] text-[color:var(--primary-foreground)] hover:bg-[color:var(--ring)] focus-visible:ring-[color:var(--ring)]",
         outline:
-          "border-slate-200 bg-white text-slate-950 hover:bg-slate-100 aria-expanded:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-slate-900",
+          "border-[color:var(--border)] bg-[color:var(--card)] text-[color:var(--foreground)] hover:bg-[color:var(--secondary)] aria-expanded:bg-[color:var(--secondary)] dark:border-[color:var(--border)] dark:bg-[color:var(--card)] dark:text-[color:var(--foreground)] dark:hover:bg-[color:var(--secondary)]",
         secondary:
-          "bg-slate-100 text-slate-950 hover:bg-slate-200 aria-expanded:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700",
+          "bg-[color:var(--secondary)] text-[color:var(--secondary-foreground)] hover:bg-[color:var(--muted)] aria-expanded:bg-[color:var(--muted)] dark:bg-[color:var(--secondary)] dark:text-[color:var(--secondary-foreground)] dark:hover:bg-[color:var(--muted)]",
         ghost:
-          "text-slate-950 hover:bg-slate-100 aria-expanded:bg-slate-100 dark:text-slate-50 dark:hover:bg-slate-900",
+          "text-[color:var(--foreground)] hover:bg-[color:var(--secondary)] aria-expanded:bg-[color:var(--secondary)] dark:text-[color:var(--foreground)] dark:hover:bg-[color:var(--secondary)]",
         destructive:
           "bg-rose-100 text-rose-700 hover:bg-rose-200 focus-visible:border-rose-400 focus-visible:ring-rose-200",
-        link: "text-emerald-600 underline-offset-4 hover:underline dark:text-emerald-400",
+        link: "text-[color:var(--primary)] underline-offset-4 hover:underline dark:text-[color:var(--primary-foreground)]",
       },
       size: {
         default:
