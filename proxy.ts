@@ -1,8 +1,8 @@
 import { auth } from '@/lib/auth/server';
 
 export default auth.middleware({
-  // Redirects unauthenticated users to sign-in page
-  loginUrl: '/auth/sign-in',
+  // Redirect unauthenticated users to the app sign-in page
+  loginUrl: '/signin',
 });
 
 export const config = {

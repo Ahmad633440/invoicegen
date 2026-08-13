@@ -1,7 +1,11 @@
+'use client'
 import Link from "next/link"
 import { ArrowRight, FileCheck, Sparkles, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import { authClient } from '@/lib/auth/client'
 
 const features = [
   {
@@ -22,16 +26,40 @@ const features = [
 ]
 
 export function LandingPage() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  const handleStart = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await authClient.getSession?.()
+      let session = null
+      if (res) {
+        if (typeof res === 'object' && 'data' in res) {
+          session = (res as any).data?.session ?? (res as any).data
+        } else if (typeof res === 'object' && 'session' in res) {
+          session = (res as any).session
+        }
+      }
+      if (session) {
+        router.push('/invoice')
+      } else {
+        router.push('/signin?redirect=/invoice')
+      }
+    } catch (e) {
+      router.push('/signin?redirect=/invoice')
+    } finally {
+      setLoading(false)
+    }
+  }, [router])
+
   return (
     <main className="relative overflow-hidden pb-20">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(79,70,229,0.16),transparent_48%)] blur-3xl" />
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 pt-8 lg:px-8">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(5,150,105,0.14),transparent_48%)] blur-3xl" />
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 pt-22 lg:px-8">
         <section className="flex-1">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary shadow-sm shadow-primary/5">
-                Invoice Gen — simple billing in PDF
-              </div>
               <div className="space-y-6">
                 <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                   Build thoughtful invoices faster, without design overhead.
@@ -41,64 +69,26 @@ export function LandingPage() {
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Button className="min-w-40" size="lg" onClick={handleStart} disabled={loading}>
+                  {loading ? 'Please wait…' : 'Start free now'}
+                </Button>
                 <Link href="/signup">
-                  <Button className="min-w-40" size="lg">
-                    Start free now
-                  </Button>
-                </Link>
-                <Link href="/login">
                   <Button variant="secondary" size="lg" className="min-w-40">
-                    Log in
+                    Sign up
                   </Button>
                 </Link>
               </div>
             </div>
 
-            <Card className="relative overflow-hidden border-border/80 bg-background/90 p-8 shadow-2xl shadow-slate-900/5 ring-1 ring-slate-900/5 backdrop-blur-xl sm:p-10">
-              <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-r from-primary/20 via-transparent to-secondary/20 blur-2xl" />
-              <div className="relative space-y-6">
-                <div className="flex items-center justify-between gap-4 rounded-3xl bg-muted p-4 text-sm text-muted-foreground">
-                  <span>Invoice summary preview</span>
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">PDF ready</span>
-                </div>
-                <div className="space-y-4 rounded-3xl bg-card p-4 shadow-sm shadow-slate-900/5">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Client</span>
-                    <span>Acme Digital</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Due date</span>
-                    <span>Aug 26, 2026</span>
-                  </div>
-                </div>
-                <div className="space-y-4 rounded-3xl bg-muted p-4 text-sm text-foreground/90">
-                  <div className="flex items-center justify-between">
-                    <span>Design work</span>
-                    <span>$1,120.00</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Domain setup</span>
-                    <span>$225.00</span>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-border/70 pt-4 font-semibold">
-                    <span>Total</span>
-                    <span>$1,345.00</span>
-                  </div>
-                </div>
-                <div className="rounded-3xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/20">
-                  Preview your invoice and export an on-brand PDF in seconds.
-                </div>
-              </div>
-            </Card>
           </div>
         </section>
 
-        <section className="mt-12 grid gap-8 lg:grid-cols-3">
-          {features.map((feature) => {
+        <section className="mt-8 grid gap-8 lg:grid-cols-3">
+              {features.map((feature) => {
             const Icon = feature.icon
             return (
-              <Card key={feature.title} className="space-y-4 border-border/80 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-primary/10 text-primary shadow-sm shadow-primary/10">
+              <Card key={feature.title} className="space-y-4 border-[color:var(--border)] bg-[color:var(--card)] p-6">
+                <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-[color:var(--primary)]/10 text-[color:var(--primary)] shadow-sm shadow-[color:var(--primary)]/10">
                   <Icon size={20} />
                 </div>
                 <div className="space-y-2">
