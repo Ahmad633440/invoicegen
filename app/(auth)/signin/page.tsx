@@ -7,7 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 
+import { useActionState } from 'react';
+import { signInWithEmail } from './actions';
+
 export default function LoginPage() {
+  const [state, formAction, isPending] = useActionState(signInWithEmail, null);
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       <Navbar />
