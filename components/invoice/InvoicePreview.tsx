@@ -63,7 +63,7 @@ export default function InvoicePreview({ open, onClose, data }: Props) {
         </div>
 
         <div className="mt-6 overflow-hidden rounded-[28px] border border-[color:var(--border)] bg-[color:var(--secondary)] p-4 shadow-[0_18px_60px_rgba(15,23,42,0.12)]">
-          <PDFViewer style={{ width: '100%', height: '80vh', border: '1px solid #d1d5db', borderRadius: 16, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.12)' }}>
+          <PDFViewer style={{ width: '100%', height: '80vh' }}>
             <InvoicePDF data={data} />
           </PDFViewer>
         </div>
